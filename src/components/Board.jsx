@@ -1,14 +1,13 @@
 import Square from "./Square";
 import { useState } from "react";
 
-function Board() {
+function Board({ x, squares, onPlay }) {
 
-    const [squares, setSquares] = useState(Array(9).fill(null))
-    const [x, setX] = useState(true)
 
 
     function handleClick(i) {
-        if (squares[i]) return
+
+        if (calculateWinner(squares) || squares[i]) return
         /* The handleClick function creates a copy of the squares array (nextSquares) with the JavaScript slice() */
         const nextSquares = squares.slice()
         if (x) {
@@ -16,8 +15,8 @@ function Board() {
         } else {
             nextSquares[i] = "O"
         }
-        setSquares(nextSquares)
-        setX(!x) //flip with X or O 
+
+        onPlay(nextSquares)
     }
 
 
@@ -26,9 +25,9 @@ function Board() {
     if (winner) {
         status = `Winner: ${winner}`
     } else {
-        status = `Next player: ${x ? "X" : "0"}`
+        status = `Next player: ${x ? "X" : "O"}`
     }
-    console.log(winner)
+    console.log(status)
 
     return (
         /* lazy evaluation: execute when called it */
