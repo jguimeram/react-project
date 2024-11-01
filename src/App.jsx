@@ -5,17 +5,19 @@ import { useState } from "react";
 function App() {
 
 
-    const [x, setX] = useState(true)
     /* an array with a single item, which itself is an array of 9 nulls */
     const [history, setHistory] = useState([Array(9).fill(null)])
     const [currentMove, setCurrentMove] = useState(0)
+    const x = currentMove % 2 === 0 /*  true -> X, false -> O */
     /* read the last squares array from the history to render the current move */
-    const currentSquares = history[history.length - 1]
+    const currentSquares = history[currentMove]
 
     /* join arrays by using spread operator */
     function handlePlay(nextSquares) {
-        setHistory([...history, nextSquares])
-        setX(!x) //flip with X or O 
+        const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+        setHistory(nextHistory);
+        setCurrentMove(nextHistory.length - 1);
+
     }
 
     /*use map to transform the history of moves into React elements representing buttons on the screen, and display a list of buttons to “jump” to past moves.*/
@@ -36,7 +38,6 @@ function App() {
 
     function jumpTo(nextMove) {
         setCurrentMove(nextMove)
-        setX(nextMove % 2 === 0) //check if next move is X or O (true (X) or false (O))
     }
 
     return (
